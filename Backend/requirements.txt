@@ -1,0 +1,31 @@
+# Core Django
+Django>=4.2,<5.0
+djangorestframework>=3.14.0
+
+# WebSockets
+channels>=4.0
+channels_redis>=4.1.0
+daphne>=4.0.0
+
+# PostgreSQL
+psycopg2-binary>=2.9
+
+# Environment variables
+django-environ>=0.11.2
+
+# CORS (frontend-backend communication)
+django-cors-headers>=4.0.0
+
+# JWT auth (optional)
+djangorestframework-simplejwt>=5.3.0
+
+# Image handling (profile pics, uploads)
+Pillow>=9.5.0
+
+# Django phone number field
+django-phonenumber-field>=8.0.0
+phonenumbers==8.13.16
+
+# Optional: Task queue
+celery>=5.3
+redis>=5.0
