@@ -19,11 +19,22 @@ class APIViewMixin:
         return user if user and user.is_authenticated else None
     
     @staticmethod
-    def send_response(self, data=None, status_code=status.HTTP_200_OK, **other_response):
+    def send_response(data=None, status_code=status.HTTP_200_OK, **other_response):
         
         return Response({
             "data": data,
             "status": "success" if status.is_success(status_code) else "error"
+        },
+        status=status_code,
+        **other_response,
+        )
+
+    @staticmethod
+    def send_error_response(error=None, status_code=status.HTTP_400_BAD_REQUEST, **other_response):
+        
+        return Response({
+            "status": "error",
+            "error": error
         },
         status=status_code)
 
@@ -47,7 +58,10 @@ class ReadOnlyModelViewset(APIModelViewSet, ListModelMixin):
 class AppAPIView(APIViewMixin, APIView):
     pass
 
+class CreateAppAPIView(AppAPIView, CreateAPIView):
 
+    def get(self, request):
+        raise MethodNotAllowed("Get Method not allowed")
 
 class ServerStatus(AppAPIView):
     def get(self, *args, **kwargs):

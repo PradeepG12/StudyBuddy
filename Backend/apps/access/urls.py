@@ -1,10 +1,7 @@
 from django.urls import path
-from apps.common.router import AppSimpleRouter
-from .views import SignUpApiViewset
+from apps.access.views import SignUpApiView, LoginAPIView 
 
-router = AppSimpleRouter()
-
-router.register('signup', SignUpApiViewset)
-
-
-urlpatterns=[] + router.urls
+urlpatterns=[
+    path("signup/", SignUpApiView.as_view()),
+    path("login/", LoginAPIView.as_view())
+]
