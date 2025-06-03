@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 from django.contrib.auth.models import BaseUserManager
 from django.db import models
 from django.conf import settings
@@ -50,12 +51,13 @@ class BaseModel(models.Model):
         related_name="created_%(class)s",
         **COMMAN_DEFAULT_NULL_BLANK_CONFIG,
     )
-    created_by = models.ForeignKey(
+    modified_by = models.ForeignKey(
         to=settings.AUTH_USER_MODEL,
         on_delete=models.SET_DEFAULT,
         related_name="modified_by_%(class)s",
         **COMMAN_DEFAULT_NULL_BLANK_CONFIG,
     )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         abstract = True
