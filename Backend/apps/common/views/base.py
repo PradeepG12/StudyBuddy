@@ -6,6 +6,8 @@ from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
 from rest_framework import status
 
+from apps.common.authentication import JWTAuthenticationFromCookie
+
 class APIViewMixin:
 
     def get_request(self):
@@ -40,7 +42,8 @@ class APIViewMixin:
 
 
 class APIModelViewSet(APIViewMixin, ModelViewSet):
-    pass
+    
+    authentication_classes = [JWTAuthenticationFromCookie]
 
 
 class CUDAPIModelViewSet(APIModelViewSet, CreateModelMixin, UpdateModelMixin, DestroyModelMixin):

@@ -100,6 +100,7 @@ DATABASES = {
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'apps.common.authentication.JWTAuthenticationFromCookie',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }

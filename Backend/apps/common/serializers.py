@@ -4,7 +4,7 @@ from django.contrib.auth.models import AnonymousUser
 class SerializerMixin:
 
     def get_request(self):
-        return self.request
+        return self.context.get("request")
     
     def get_user(self):
         return self.get_request().user
