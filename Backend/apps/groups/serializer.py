@@ -19,6 +19,7 @@ class GroupCreateSerializer(AppModelSerializer):
         ]
     
     def create(self, validated_data):
+        
         user = self.get_user()
         members = validated_data.pop("members",[])
         validated_data.pop("admin",[])
