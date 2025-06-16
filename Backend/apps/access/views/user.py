@@ -8,10 +8,10 @@ from apps.access.serializers import SignupSerializer
 class SignUpApiView(AppAPIView):
 
     queryset = User.objects.all()
+    serializer_class = SignupSerializer
     
     def post(self, request, *args, **kwargs):
-        serializer = SignupSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return self.send_response({"message":"User Created Successfully"}, status_code=status.HTTP_201_CREATED)
-        return self.send_error_response(serializer.errors)
+        
+        serializer = self.get_valid_serializer(data=request.data)
+        serializer.save()
+        return self.send_response({"message":serializer.data}, status_code=status.HTTP_201_CREATED)

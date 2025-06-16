@@ -18,7 +18,10 @@ class APIViewMixin:
     def get_authenticated_user(self):
         user = self.get_user()
         return user if user and user.is_authenticated else None
-    
+
+    def get_serializer(self):
+        return self.serializer_class
+
     @staticmethod
     def send_response(data=None, status_code=status.HTTP_200_OK, **other_response):
         
@@ -57,12 +60,27 @@ class ReadOnlyModelViewset(APIModelViewSet, ListModelMixin):
 
 
 class AppAPIView(APIViewMixin, APIView):
-    pass
+    
+    serializer_class = None
+
+    def get_serializer_class(self):
+        return self.serializer_class
+
+    def get_serializer_context(self):
+        return {"request": self.get_request()}
+    
+    def get_valid_serializer(self, data=None):
+
+        serializer = self.get_serializer_class()(data=data, context=self.get_serializer_context())
+        serializer.is_valid(raise_exception=True)
+        return serializer
+
 
 class CreateAppAPIView(AppAPIView, CreateAPIView):
 
     def get(self, request):
         raise MethodNotAllowed("Get Method not allowed")
+
 
 class ServerStatus(AppAPIView):
     def get(self, *args, **kwargs):

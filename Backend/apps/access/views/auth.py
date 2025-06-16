@@ -15,7 +15,7 @@ class LoginAPIView(AppAPIView):
         if not user:
             return self.send_error_response({"error":"User Not Found"})
         refresh = RefreshToken.for_user(user)
-        self.send_response({
+        return self.send_response({
             "message":"Login Successful",
             "user": user.id,
             "access_token": str(refresh.access_token),

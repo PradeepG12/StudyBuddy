@@ -1,3 +1,4 @@
+from django.urls import path
 from apps.common.router import AppSimpleRouter
 from apps.groups.views import GroupCUDAPIViewset, GroupJoinExitAPIView
 
