@@ -12,8 +12,11 @@ class SerializerMixin:
 class AppModelSerializer(SerializerMixin, serializers.ModelSerializer):
     
     def create(self, validated_data):
-        created_by = self.Meta.model.get_model_field("created_by")
+        
+        created_by = self.Meta.model._meta.get_field("created_by")
+        print(created_by)
         user = self.get_user()
+        print("user")
         if created_by and not validated_data.get("created_by") and user and not isinstance(user, AnonymousUser):
             validated_data["created_by"] = user
         instance = super().create(validated_data=validated_data)

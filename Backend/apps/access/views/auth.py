@@ -9,34 +9,30 @@ class LoginAPIView(AppAPIView):
 
     def post(self, request):
 
-        email = request.data["email"]
-        password = request.data["password"]
+        email = request.data.get("email")
+        password = request.data.get("password")
         user = authenticate(email=email, password=password)
         if not user:
-            self.send_error_response({"error":"User Not Found"})
-        
+            return self.send_error_response({"error":"User Not Found"})
         refresh = RefreshToken.for_user(user)
-        response = self.send_response({
+        self.send_response({
             "message":"Login Successful",
-            "user": user.id
+            "user": user.id,
+            "access_token": str(refresh.access_token),
+            "refresh_token": str(refresh)
         })
-        response.set_cookie("access_token", str(refresh.access_token), httponly=True)
-        response.set_cookie("refresh_token", str(refresh), httponly=True)
-        return response
-    
+
 
 class TokenRefreshAPIView(AppAPIView):
 
     def post(self, request):
 
-        refresh_token = request.COOKIES.get("refresh_token")
+        refresh_token = request.data.get("refresh_token")
         try:
             refresh = RefreshToken(refresh_token)
-            response = self.send_response({
-                "Message": "Token Refreshed Successfully"
+            self.send_response({
+                "access_token": str(refresh.access_token)
             })
-            response.set_cookie("access_token", str(refresh.access_token))
-            return response
         except (TokenError, InvalidToken):
             return self.send_response({"Detail":"Invalid Credentials"}, status_code=status.HTTP_401_UNAUTHORIZED)
 
@@ -44,7 +40,11 @@ class TokenRefreshAPIView(AppAPIView):
 class LogoutAPIView(AppAPIView):
 
     def post(self, request):
-        response = self.send_response({"message":"Logged out successfully"})
-        response.delete_cookie("access_token")
-        response.delete_cookie("refresh_token")
-        return response
+
+        try:
+            refresh_token = request.data.get("refresh_token")
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            self.send_response({"message":"Logged out successfully"},status_code=status.HTTP_205_RESET_CONTENT)
+        except(TokenError, InvalidToken):
+            return self.send_error_response({"error":"Invalid Credintials"}, status_code=status.HTTP_404_NOT_FOUND)
