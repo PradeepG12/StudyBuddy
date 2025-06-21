@@ -6,11 +6,21 @@ from .models import User
 
 class SignupSerializer(AppModelSerializer):
     
-    first_name = serializers.CharField(required=True)
-    last_name = serializers.CharField(required=True)
-    phone_number = serializers.CharField(required=True)
-    password = serializers.CharField(write_only=True)
+    last_name = serializers.CharField(required=False)
 
     class Meta:
         model = User
         fields = ['first_name','last_name','email','password','phone_number']
+
+
+class UserListSerializer(AppModelSerializer):
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "phone_number",
+        ]

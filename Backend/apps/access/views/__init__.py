@@ -1,2 +1,2 @@
 from .auth import LoginAPIView, TokenRefreshAPIView, LogoutAPIView
-from .user import SignUpApiView
+from .user import SignUpApiView, UserListAPIViewSet
