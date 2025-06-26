@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'apps.access',
     'apps.common',
     'apps.groups',
+    'apps.chats',
 ]
 
 MIDDLEWARE = [
