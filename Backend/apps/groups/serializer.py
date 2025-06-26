@@ -33,7 +33,18 @@ class GroupCreateSerializer(AppModelSerializer):
             ]
         GroupMembers.objects.bulk_create(group_members)
         return instance
-    
+
+
+class GroupListSerializer(AppModelSerializer):
+
+    class Meta:
+        model = Group
+        fields = [
+            "id",
+            "name",
+            "description",
+            "created_at",
+        ]
 
 class GroupJoinExitSerializer(AppModelSerializer):
     pass

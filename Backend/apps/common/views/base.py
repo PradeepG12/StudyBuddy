@@ -10,8 +10,6 @@ from rest_framework.permissions import IsAuthenticated
 
 class APIViewMixin:
 
-    permission_classes = [IsAuthenticated]
-    
     def get_request(self):
         return self.request
     
