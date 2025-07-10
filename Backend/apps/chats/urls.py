@@ -4,6 +4,6 @@ from apps.common.router import AppSimpleRouter
 
 router = AppSimpleRouter()
 
-router.register(r"chat/group_(?P<group_id>\d+)/list", GroupMessageListAPIViewSet)
+router.register(r"chat/group/(?P<group_id>\d+)/list", GroupMessageListAPIViewSet ,basename='group-message')
 
 urlpatterns = []+ router.urls

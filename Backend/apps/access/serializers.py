@@ -12,6 +12,15 @@ class SignupSerializer(AppModelSerializer):
         model = User
         fields = ['first_name','last_name','email','password','phone_number']
 
+class BaseUserInfoSerializer(AppModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+        ]
 
 class UserListSerializer(AppModelSerializer):
 

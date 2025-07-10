@@ -13,6 +13,14 @@ class Group(BaseModel):
     class Meta(BaseModel.Meta):
         default_related_name = "related_groups"
 
+    @property
+    def group_members(self):
+        return User.objects.filter(id__in=self.related_group_members.values_list("user", flat=True))
+    
+    @property
+    def group_admin(self):
+        return User.objects.filter(id__in=self.related_group_members.filter(role=GroupRoleTypeChoices.admin).values_list("user", flat=True))
+    
 
 class GroupMembers(BaseModel):
 
@@ -21,4 +29,4 @@ class GroupMembers(BaseModel):
     role = models.CharField(choices=GroupRoleTypeChoices, default=GroupRoleTypeChoices.member)
     
     class Meta(BaseModel.Meta):
-        default_related_name = "related_group_roles"
+        default_related_name = "related_group_members"

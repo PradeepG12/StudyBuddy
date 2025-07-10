@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.mixins import CreateModelMixin, ListModelMixin, UpdateModelMixin, DestroyModelMixin
+from rest_framework.mixins import CreateModelMixin, ListModelMixin, UpdateModelMixin, DestroyModelMixin, RetrieveModelMixin
 from rest_framework.generics import CreateAPIView
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
@@ -43,7 +43,7 @@ class APIViewMixin:
         status=status_code)
 
 
-class APIModelViewSet(APIViewMixin):
+class APIModelViewSet(APIViewMixin, GenericViewSet):
     
     pass
 
@@ -59,6 +59,8 @@ class ReadOnlyModelViewset(APIModelViewSet, ListModelMixin, GenericViewSet):
     def create(self, request, *args, **kwargs):
         raise MethodNotAllowed("POST is not allowed")
 
+class AppRetriveModelAPIViewset(APIModelViewSet, RetrieveModelMixin):
+    pass
 
 class AppAPIView(APIViewMixin, APIView):
     

@@ -18,9 +18,7 @@ def get_user(validated_token):
 class JWTMiddleware(BaseMiddleware):
     async def __call__(self, scope, *args, **kwargs):
         query_string = scope['query_string'].decode()
-        print(query_string)
         token_param = parse_qs(query_string).get('token')
-        print(token_param)
 
         if token_param:
             try:
