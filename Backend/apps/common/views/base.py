@@ -4,9 +4,11 @@ from rest_framework.mixins import CreateModelMixin, ListModelMixin, UpdateModelM
 from rest_framework.generics import CreateAPIView
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import status, permissions
 
+class NonAuthenticatedAPIViewMixin:
+
+    permission_classes = [permissions.AllowAny]
 
 class APIViewMixin:
 
@@ -61,7 +63,7 @@ class ReadOnlyModelViewset(APIModelViewSet, ListModelMixin, GenericViewSet):
 class AppAPIView(APIViewMixin, APIView):
     
     serializer_class = None
-
+    
     def get_serializer_class(self):
         return self.serializer_class
 
@@ -69,7 +71,8 @@ class AppAPIView(APIViewMixin, APIView):
         return {"request": self.get_request()}
     
     def get_valid_serializer(self, data=None):
-
+        if not data:
+            data = self.request.data
         serializer = self.get_serializer_class()(data=data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         return serializer
