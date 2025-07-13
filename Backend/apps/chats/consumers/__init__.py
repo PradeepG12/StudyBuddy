@@ -1,0 +1,2 @@
+from .group_chat_consumer import GroupChatConsumer
+from .private_chat_consumer import PrivateChatConsumer

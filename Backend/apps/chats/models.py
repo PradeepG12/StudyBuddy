@@ -13,3 +13,14 @@ class GroupMessage(BaseModel):
 
     class Meta:
         default_related_name = "related_group_messages"
+
+
+class PrivateMessage(BaseModel):
+    """"""
+
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="chat_receiver")
+    content = models.TextField()
+
+    class Meta:
+        default_related_name = "related_private_messages"

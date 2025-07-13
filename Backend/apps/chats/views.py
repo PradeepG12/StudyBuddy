@@ -1,7 +1,7 @@
-from apps.chats.models import GroupMessage
-from apps.chats.serializers import GroupMessageListSerializer
+from apps.chats.models import GroupMessage, PrivateMessage
+from apps.chats.serializers import GroupMessageListSerializer, PrivateMessageListSerializer
 from apps.common.views import ReadOnlyModelViewset
-from apps.groups.models import GroupMembers
+# from apps.groups.models import GroupMembers
 
 
 class GroupMessageListAPIViewSet(ReadOnlyModelViewset):
@@ -17,3 +17,14 @@ class GroupMessageListAPIViewSet(ReadOnlyModelViewset):
         # if not GroupMembers.objects.filter(group=group, user=user).exists():
         #     raise PermissionError({"error":"Invalid Details"})
         return GroupMessage.objects.filter(group=group, sender=user)
+    
+
+class PrivateMessageListAPIViewSet(ReadOnlyModelViewset):
+    """"""
+
+    serializer_class = PrivateMessageListSerializer
+
+    def get_queryset(self):
+        user = self.get_user()
+        receiver = self.kwargs.get("receiver_id")
+        return PrivateMessage.objects.filter(sender=user, receiver=receiver)

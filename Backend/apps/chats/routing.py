@@ -1,6 +1,9 @@
-from django.urls import re_path
-from apps.chats.consumer import ChatConsumer
+from django.urls import path
+from apps.chats.consumers import GroupChatConsumer, PrivateChatConsumer
+
+URL_PREFIX = "ws/chat/api"
 
 websocket_urlpatterns = [
-    re_path(r'ws/chat/(?P<group_id>\w+)/$', ChatConsumer.as_asgi())
+    path(f"{URL_PREFIX}/group/<int:group_id>/", GroupChatConsumer.as_asgi()),
+    path(f"{URL_PREFIX}/private/<int:receiver_id>/", PrivateChatConsumer.as_asgi()),
 ]
