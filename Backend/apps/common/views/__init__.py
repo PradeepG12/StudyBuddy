@@ -1,1 +1,4 @@
-from .base import AppAPIView, CreateAPIView, CUDAPIModelViewSet, ReadOnlyModelViewset, ServerStatus, NonAuthenticatedAPIViewMixin
+from .base import (
+    AppAPIView, CreateAPIView, CUDAPIModelViewSet, ReadOnlyModelViewset, ServerStatus, NonAuthenticatedAPIViewMixin,
+    AppRetriveModelAPIViewset
+)

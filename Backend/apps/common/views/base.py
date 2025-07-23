@@ -1,10 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.mixins import CreateModelMixin, ListModelMixin, UpdateModelMixin, DestroyModelMixin
+from rest_framework.mixins import CreateModelMixin, ListModelMixin, UpdateModelMixin, DestroyModelMixin, RetrieveModelMixin
 from rest_framework.generics import CreateAPIView
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
 from rest_framework import status, permissions
+from django.contrib.auth import get_user_model
 
 class NonAuthenticatedAPIViewMixin:
 
@@ -21,6 +22,13 @@ class APIViewMixin:
     def get_authenticated_user(self):
         user = self.get_user()
         return user if user and user.is_authenticated else None
+    
+    def get_user_by_id(self, user_id):
+        User = get_user_model()
+        try:
+            return User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return None
 
     @staticmethod
     def send_response(data=None, status_code=status.HTTP_200_OK, **other_response):
@@ -43,7 +51,7 @@ class APIViewMixin:
         status=status_code)
 
 
-class APIModelViewSet(APIViewMixin):
+class APIModelViewSet(APIViewMixin, GenericViewSet):
     
     pass
 
@@ -59,6 +67,8 @@ class ReadOnlyModelViewset(APIModelViewSet, ListModelMixin, GenericViewSet):
     def create(self, request, *args, **kwargs):
         raise MethodNotAllowed("POST is not allowed")
 
+class AppRetriveModelAPIViewset(APIModelViewSet, RetrieveModelMixin):
+    pass
 
 class AppAPIView(APIViewMixin, APIView):
     

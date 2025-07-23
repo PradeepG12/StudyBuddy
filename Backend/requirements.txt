@@ -29,3 +29,6 @@ phonenumbers==8.13.16
 # Optional: Task queue
 celery>=5.3
 redis>=5.0
+
+# dj-choices
+django-choices==2.0.0
