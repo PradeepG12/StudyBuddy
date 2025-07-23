@@ -34,7 +34,7 @@ class PrivateChatConsumer(CommonChatConsumer):
 
     async def user_in_chat(self, event):
         event.update({
-            "message": f"{event["user_name"]} is in chat :)"
+            "message": f"{event['user_name']} is in chat :)"
         })
         await self.send_message(event)
 

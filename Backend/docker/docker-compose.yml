@@ -7,10 +7,13 @@ services:
       dockerfile: ./docker/dockerfile/dockerfile
     ports:
       - "8000:8000"
+      - "8081:8081"
+    command: sh docker/scripts/start.sh
     volumes:
       - ../:/app
     depends_on:
       - db
+      - redis
 
   db:
     image: postgres:13
@@ -18,3 +21,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pradeep
       POSTGRES_DB: study-buddy
+
+  redis:
+    image: redis:latest
