@@ -1,6 +1,6 @@
-from apps.common.views import CUDAPIModelViewSet, AppAPIView, ReadOnlyModelViewset
+from apps.common.views import CUDAPIModelViewSet, AppAPIView, ReadOnlyModelViewset, AppRetriveModelAPIViewset
 from apps.groups.models import Group
-from apps.groups.serializer import GroupCreateSerializer, GroupListSerializer
+from apps.groups.serializer import GroupCreateSerializer, GroupListSerializer, GroupDetailSerializer
 from apps.groups.config import GroupJoinExitConfig
 
 
@@ -15,6 +15,10 @@ class GroupListApiViewSet(ReadOnlyModelViewset):
     queryset = Group.objects.all()
     serializer_class = GroupListSerializer
 
+class GroupDetailApiViewSet(AppRetriveModelAPIViewset):
+    
+    queryset = Group.objects.all()
+    serializer_class = GroupDetailSerializer
 
 class GroupJoinExitAPIView(AppAPIView):
 

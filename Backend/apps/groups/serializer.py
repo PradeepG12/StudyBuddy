@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.access.serializers import BaseUserInfoSerializer
 from apps.groups.config import GroupRoleTypeChoices
 from apps.access.models import User
 from apps.common.serializers import AppModelSerializer
@@ -48,3 +49,21 @@ class GroupListSerializer(AppModelSerializer):
 
 class GroupJoinExitSerializer(AppModelSerializer):
     pass
+
+class GroupDetailSerializer(AppModelSerializer):
+
+    group_admin = BaseUserInfoSerializer(read_only=True, many=True)
+    group_members = BaseUserInfoSerializer(read_only=True, many=True)
+    created_by = BaseUserInfoSerializer(read_only=True)
+
+    class Meta:
+        model = Group
+        fields = [
+            "id",
+            "name",
+            "description",
+            "created_by",
+            "created_at",
+            "group_admin",
+            "group_members",
+        ]

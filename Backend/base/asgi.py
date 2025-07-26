@@ -8,9 +8,17 @@ https://docs.djangoproject.com/en/5.0/howto/deployment/asgi/
 """
 
 import os
-
-from django.core.asgi import get_asgi_application
-
+import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'base.settings')
+django.setup()
+# from django.core.asgi import get_asgi_application
+from channels.routing import ProtocolTypeRouter, URLRouter
+from apps.common.middleware import JWTMiddleware
+from apps.chats.routing import websocket_urlpatterns
 
-application = get_asgi_application()
+
+application = ProtocolTypeRouter({
+    "websocket": JWTMiddleware(
+        URLRouter(websocket_urlpatterns)
+    )
+})

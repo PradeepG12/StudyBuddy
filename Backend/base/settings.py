@@ -46,10 +46,12 @@ INSTALLED_APPS = [
 ]+[
     'rest_framework',
     'rest_framework_simplejwt',
+    'channels',
 ]+[
     'apps.access',
     'apps.common',
     'apps.groups',
+    'apps.chats',
 ]
 
 MIDDLEWARE = [
@@ -81,6 +83,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'base.wsgi.application'
+ASGI_APPLICATION = 'base.asgi.application'
 
 AUTH_USER_MODEL = 'access.User'
 
@@ -95,6 +98,15 @@ DATABASES = {
         "PASSWORD": env.str("DB_PASSWORD", default=""),
         "HOST": env.str("DB_HOST", default=""),
         "PORT": env.str("DB_PORT", default=""),
+    }
+}
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': "channels_redis.core.RedisChannelLayer",
+        'CONFIG': {
+            'hosts': [f"redis://{env.str('REDIS_HOST', default='')}:{env.str('REDIS_PORT', default='')}"]
+        }
     }
 }
 

@@ -22,4 +22,5 @@ urlpatterns = [
     path('api/', include("apps.access.urls")),
     path("api/", include("apps.common.urls")),
     path("api/", include("apps.groups.urls")),
+    path("api/", include("apps.chats.urls")),
 ]
