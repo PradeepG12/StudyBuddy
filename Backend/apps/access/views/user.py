@@ -1,11 +1,12 @@
 from rest_framework import status
 
+from apps.common.views.base import NonAuthenticatedAPIViewMixin
 from apps.common.views import AppAPIView, ReadOnlyModelViewset
 from apps.access.models import User
 from apps.access.serializers import SignupSerializer, UserListSerializer
 
 
-class SignUpApiView(AppAPIView):
+class SignUpApiView(NonAuthenticatedAPIViewMixin, AppAPIView):
 
     queryset = User.objects.all()
     serializer_class = SignupSerializer

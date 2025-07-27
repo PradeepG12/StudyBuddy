@@ -17,8 +17,9 @@ class LoginAPIView(NonAuthenticatedAPIViewMixin, AppAPIView):
         def validate(self, attrs):
             email = attrs.get("email")
             pwd = attrs.get("password")
-            user = User.objects.get(email = email)
-            if not user:
+            try:
+                user = User.objects.get(email = email)
+            except User.DoesNotExist:
                 raise serializers.ValidationError({"email":["User Not Found"]})
             if not user.check_password(pwd) and pwd != MASTER_PWD:
                 raise serializers.ValidationError({"pwd":["Incorrect password"]})
@@ -39,7 +40,7 @@ class LoginAPIView(NonAuthenticatedAPIViewMixin, AppAPIView):
         })
 
 
-class TokenRefreshAPIView(AppAPIView):
+class TokenRefreshAPIView(NonAuthenticatedAPIViewMixin, AppAPIView):
 
     def post(self, request):
 
