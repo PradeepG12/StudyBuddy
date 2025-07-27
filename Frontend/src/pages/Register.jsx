@@ -1,32 +1,39 @@
-import { useState } from "react";                        // Importing React's useState hook to manage form data.
-import { useNavigate } from "react-router-dom";         // For navigation after successful registration.
+import { useState } from "react";                        
+import { useNavigate } from "react-router-dom";         
+import axiosInstance from "../utils/axios";
 
 const Register = () => {
-  const navigate = useNavigate();                       // Initialize navigation hook.
+  const navigate = useNavigate();                       
   
-  const [formData, setFormData] = useState({            // State to hold form input values.
-    name: "",
+  const [formData, setFormData] = useState({            
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;                   // Destructure name and value from input field.
+    const { name, value } = e.target;                   
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,                                    // Update state with changed input.
+      [name]: value,                                    
     }));
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();                                 // Prevent form refresh on submit.
+    e.preventDefault();                                 
     try {
-      // TODO: Replace with actual API call.
-      console.log("Registering user:", formData);       // Simulate API call by logging formData.
-      // On success, redirect to login page
-      navigate("/login");                               // Navigate to login page after success.
+      console.log("Registering user:", formData);       
+      const payload = {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        email: formData.email,
+        password: formData.password
+      }
+      await axiosInstance.post("/signup/", payload)
+      navigate("/login");                               
     } catch (err) {
-      console.error("Registration failed", err);        // Handle error (placeholder).
+      console.error("Registration failed", err);        
     }
   };
 
@@ -40,9 +47,18 @@ const Register = () => {
         
         <input
           type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
+          name="fisrt_name"
+          placeholder="First Name"
+          value={formData.first_name}
+          onChange={handleChange}
+          className="w-full mb-4 px-4 py-2 border rounded"
+        />
+
+        <input
+          type="text"
+          name="last_name"
+          placeholder="Last Name"
+          value={formData.last_name}
           onChange={handleChange}
           className="w-full mb-4 px-4 py-2 border rounded"
         />

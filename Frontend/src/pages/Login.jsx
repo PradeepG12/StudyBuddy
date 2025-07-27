@@ -1,7 +1,7 @@
 // src/pages/Login.jsx
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import axios from '../utils/axios'
+import axios from "../utils/axios";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -13,8 +13,18 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/auth/login/", { email, password });
-      login(res.data.token); // Adjust based on your API response
+      const res = await axios.post("/login/", { email, password });
+      
+      const { access_token, refresh_token, user } = res.data.data;
+
+      // ✅ Save tokens and user info to localStorage
+      localStorage.setItem("access_token", access_token);
+      localStorage.setItem("refresh_token", refresh_token);
+      localStorage.setItem("user_id", user);
+
+      login(access_token, refresh_token, user);
+
+      // login(res.data.token); // Adjust based on your API response
       navigate("/dashboard");
     } catch (err) {
       alert("Login failed");
