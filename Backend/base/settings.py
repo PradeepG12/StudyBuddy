@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'channels',
     'corsheaders',
+    'django_extensions',
 ]+[
     'apps.access',
     'apps.common',
@@ -111,6 +112,13 @@ CHANNEL_LAYERS = {
         'CONFIG': {
             'hosts': [f"redis://{env.str('REDIS_HOST', default='')}:{env.str('REDIS_PORT', default='')}"]
         }
+    }
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': "django.core.cache.backends.locmem.LocMemCache",
+        'LOCATION': "default",
     }
 }
 
