@@ -1,3 +1,5 @@
+from django.db.models import Q
+
 from apps.chats.models import GroupMessage, PrivateMessage
 from apps.chats.serializers import GroupMessageListSerializer, PrivateMessageListSerializer
 from apps.common.views import ReadOnlyModelViewset
@@ -27,4 +29,6 @@ class PrivateMessageListAPIViewSet(ReadOnlyModelViewset):
     def get_queryset(self):
         user = self.get_user()
         receiver = self.kwargs.get("receiver_id")
-        return PrivateMessage.objects.filter(sender=user, receiver=receiver)
+        return PrivateMessage.objects.filter(
+            Q(sender=user, receiver=receiver) | Q(receiver=user, sender=receiver)
+        )
